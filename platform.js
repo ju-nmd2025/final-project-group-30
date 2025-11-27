@@ -9,5 +9,5 @@ export let platform = {
     fill("pink");
     rect(x, y, this.w, this.h);
     pop();
-  },
+  }
 };
