@@ -1,5 +1,6 @@
-import { character } from "./character";
-import platform from "platform";
+import { character } from "./character.js";
+import { platform }from "./platform.js";
+
 
 //set start position
 let x = 100;
@@ -11,24 +12,32 @@ const gravity = 0.4;
 const jumpSpeed = -13;
 let hitTheGround = false;
 
+
 //setup canvas
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(400, 600);
+  /*generateStartingPlatforms(); // plattform ska gå ner*/
 }
 
+
 function draw() {
-  background(0, 200, 250);
+  background(0, 220, 250);
 
   //floor
-  line(0, 300, 400, 300);
+  /*line(0, 400, 400, 400);*/
+  
+  rect(0,400, 400, 300);
+  strokeWeight(0);
+  fill(255,250,200);
 
   //apply gravity
   velocityY += gravity;
   y += velocityY;
 
+
   // hit the ground
-  if (y > 250) {
-    y = 250;
+  if (y > 350) {
+    y = 350;
     velocityY = 0;
     hitTheGround = true;
 
@@ -38,23 +47,15 @@ function draw() {
 
     
   }
-  
+
   //move with clicks from left to right
   if (keyIsDown(37)) x -= 5;
   if (keyIsDown(39)) x += 5;
 
-  //move left
-  /* x--;
-     if (x < 0) {
-       x = 400;
-     }
-  */
-
+ 
   // draw characters and platforms
   character.draw(x, y);
-  platform.draw(40, 150);
-  platform.draw(200, 90);
+  platform.draw(30, 250);
+  platform.draw(200, 110);
 }
-
-
 
