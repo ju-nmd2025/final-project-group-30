@@ -16,7 +16,7 @@ let hitTheGround = false;
 //setup canvas
 function setup() {
   createCanvas(400, 600);
-  /*generateStartingPlatforms(); // plattform ska gå ner*/
+  
 }
 
 
