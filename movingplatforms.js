@@ -1,49 +1,59 @@
-
-export default class Platform {
+export default class MovingPlatform {
   constructor(x, y, w, h) {
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
+
+    
   }
 
-  draw () {
+  //platforms goes to the left
+  update() {
+    this.x -= 2; 
+
+    if (this.x < 0) {
+      this.x = 400; 
+    }
+  }
+
+  // draw platform
+  draw() {
     push();
-    fill("pink");
+    fill("beige");
     rect(this.x, this.y, this.w, this.h);
     pop();
   }
 }
 
-// Check if character is ontop on platform
-function checkPlatformCollision() {
-  
-  for (let p of platforms) {
-    // Only check when falling and character is over the platform
+
+// Check if character is ontop on movingplatform
+
+function checkMovingPlatformCollision() {
+  for (let p of movingPlatforms) {
     const isFalling = velocityY > 0;
     const isAbovePlatform = y + character.h <= p.y + velocityY + 1;
     const isTouchingPlatform =
       x + character.w > p.x && x < p.x + p.w && y + character.h >= p.y;
 
     if (isFalling && isAbovePlatform && isTouchingPlatform) {
-      y = p.y - character.h; // Place character on top
-      velocityY = jumpSpeed; // Jump automatically
+      y = p.y - character.h;
+      velocityY = jumpSpeed;
       return true;
     }
   }
   return false;
 }
 
-
-//if platform goes under screen, remove and move up
-function recyclePlatforms() {
-  for (let p of platforms) {
+// if platforms goes under screen, move up
+function recycleMovingPlatforms() {
+  for (let p of movingPlatforms) {
     if (p.y > height) {
       p.y = random(-200, 0);
-      p.x = random(20, 320);
+     p.x = random(20, 320);
     }
   }
 }
 
 
-  
+

@@ -6,8 +6,8 @@ export let character = {
     w: 50,
     h: 50,
 
+    // do character
     draw(x, y) {
-      //character 
       this.x = x;
       this.y = y;
 
