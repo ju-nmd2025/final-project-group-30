@@ -20,7 +20,7 @@ export default class MovingPlatform {
   // draw platform
   draw() {
     push();
-    fill("beige");
+    fill("pink");
     rect(this.x, this.y, this.w, this.h);
     pop();
   }

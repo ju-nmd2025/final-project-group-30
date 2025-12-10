@@ -1,6 +1,7 @@
 import { character } from "./character.js";
 import Platform from "./platform.js";
 import MovingPlatform from "./movingplatforms.js";
+import BreakablePlatform from "./breakableplatform.js";
 
 //set start position
 let x = 100;
@@ -25,6 +26,7 @@ for (let i = 0; i < 10; i++) {
   platforms.push(new Platform(px, py, 80, 20));
 }
 
+
 //generate some movingplatforms (arrays)
 let movingPlatforms = [
   new MovingPlatform(40, 150, 80, 20),
@@ -34,6 +36,14 @@ let movingPlatforms = [
   new MovingPlatform(260, 420, 80, 20),
   
 ];
+
+//Generate BreakingPlatforms (array)
+//generate some movingplatforms (arrays)
+let breakablePlatforms = [
+  new BreakablePlatform(40, 150, 80, 20),
+  new BreakablePlatform(200, 90, 80, 20),
+];
+
 
 
 //setup canvas
@@ -48,7 +58,8 @@ function draw() {
   strokeWeight(0);
   fill(255, 250, 200);
 
-  //apply gravity
+
+  //apply gravity to character
   velocityY += gravity;
   y += velocityY;
 
@@ -57,36 +68,49 @@ function draw() {
     velocityY = 0;
   }
 
+
   //move with clicks from left to right
   if (keyIsDown(37)) x -= 5;
   if (keyIsDown(39)) x += 5;
 
-  //call the functions "check collis"
+
+  //call the functions "check collision" from files
   checkPlatformCollision();
   checkMovingPlatformCollision();
+  checkBreakablePlatformCollision();
+
 
   //move platforms down
   if (y < height / 2) {
     let diff = height / 2 - y;
     y = height / 2;
 
-    //Move platforms down
+    //Move Regularplatforms down
     for (let p of platforms) {
       p.y += diff;
 
-      //When platforms goes under screen, remove and add new 
+      //When Regularplatforms goes under screen, remove and add new 
        recyclePlatforms();
         
     }
-    // movingPlatforms går ner
+    // movingPlatforms goes down
     for (let mp of movingPlatforms){
       mp.y+= diff;
     }
 
     // when movingPlatforms goes under screen, remove and add new
     recycleMovingPlatforms();
+
+    //breakable platforms goes down
+    for(let bp of breakablePlatforms){
+      bp.y+= diff;
+    }
+
+    // when Brakable platforms goes under screen, remove and add new
+    recycleBreakablePlatforms();
   }
 
+ 
 
   // draw platforms
   for (let p of platforms) {
@@ -99,6 +123,12 @@ function draw() {
     mp.draw();
   }
 
+  // draw  breakable platform
+  for (let bp of breakablePlatforms){
+    bp.draw ();
+  }
+
   // draw chararcter
   character.draw(x, y);
 }
+
