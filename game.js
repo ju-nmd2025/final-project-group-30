@@ -3,6 +3,8 @@ import Platform from "./platform.js";
 import MovingPlatform from "./movingplatforms.js";
 import BreakablePlatform from "./breakableplatform.js";
 
+
+
 //set start position
 let x = 100;
 let y = 100;
@@ -38,11 +40,11 @@ let movingPlatforms = [
 ];
 
 //Generate BreakingPlatforms (array)
-//generate some movingplatforms (arrays)
 let breakablePlatforms = [
   new BreakablePlatform(40, 150, 80, 20),
   new BreakablePlatform(200, 90, 80, 20),
 ];
+
 
 
 
@@ -53,6 +55,8 @@ function setup() {
 }
 
 function draw() {
+
+  //background
   background(0, 220, 250);
   rect(0, 540, 400, 300);
   strokeWeight(0);
@@ -63,7 +67,7 @@ function draw() {
   velocityY += gravity;
   y += velocityY;
 
-  // hit the ground
+  // hit the ground - stop
   if (y > 500) {
     velocityY = 0;
   }
@@ -80,7 +84,7 @@ function draw() {
   checkBreakablePlatformCollision();
 
 
-  //move platforms down
+  //move platforms down when jumping
   if (y < height / 2) {
     let diff = height / 2 - y;
     y = height / 2;
@@ -110,8 +114,6 @@ function draw() {
     recycleBreakablePlatforms();
   }
 
- 
-
   // draw platforms
   for (let p of platforms) {
     p.draw();
@@ -130,5 +132,10 @@ function draw() {
 
   // draw chararcter
   character.draw(x, y);
-}
+
+
+  }
+
+ 
+
 

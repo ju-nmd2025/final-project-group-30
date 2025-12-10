@@ -5,15 +5,20 @@ export default class MovingPlatform {
     this.w = w;
     this.h = h;
 
-    
+    this.speed = 2;
+    this.direction = -1 ; // move left
   }
 
   //platforms goes to the left
   update() {
-    this.x -= 2; 
+    this.x += this.speed * this.direction;
 
+    // bounce back at edge
     if (this.x < 0) {
-      this.x = 400; 
+      this.direction = 1;  // move right
+    }
+    if (this.x + this.w >= 400) {
+      this.direction = -1; //move left
     }
   }
 
