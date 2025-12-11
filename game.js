@@ -5,7 +5,7 @@ import BreakablePlatform from "./breakableplatform.js";
 
 let gameState = "start";
 
-//set start position
+// set start position
 let x = 100;
 let y = 100;
 
@@ -16,13 +16,13 @@ const gravity = 0.35;
 const jumpSpeed = -15;
 
 
-//generare platforms (arrays)
+//generare regular platforms (arrays)
 let platforms = [];
-let startY = 500; // Starta nära marken
-let spacing = 80; // Avstånd
+let startY = 500; // Start close to ground
+let spacing = 80; // Distance between platforms
 
 for (let i = 0; i < 10; i++) {
-  let px = random(20, 320); // Slumpmässig x-position
+  let px = random(20, 320); // random x-position
   let py = startY - i * spacing; 
   platforms.push(new Platform(px, py, 80, 20));
 }
@@ -38,12 +38,13 @@ let movingPlatforms = [
   
 ];
 
-//Generate BreakingPlatforms (array)
+//Generate BreakingPlatforms (arrays)
 let breakablePlatforms = [
   new BreakablePlatform(40, 150, 80, 20),
   new BreakablePlatform(200, 90, 80, 20),
 ];
 
+// To call on when game over
 function resetCharacter (){
   x = 100;
   y = 100;
@@ -57,6 +58,7 @@ function setup() {
 
 }
 
+// to call on when game over
 function resetPlatforms (){
   platforms = [];
   for (let i = 0; i < 10; i++){
@@ -92,7 +94,7 @@ function drawRestartButton (){
   text ("RESTART", 130, 282);
 }
 
-// start game when clicked the start button
+// start game when clicking the start button
 function mousePressed (){
   if (gameState === "start"){
     if (mouseX > 100 && mouseX < 300 && mouseY > 230 && mouseY < 310){
@@ -102,9 +104,9 @@ function mousePressed (){
     }
   }
 
-  // restart game when clicked the gameover
+  // restart game when clicking the restart button
   if (gameState === "gameover"){
-    if (mouseX > 100 && mouseX < 300 && mouseY > 230 && mouseY < 30){
+    if (mouseX > 100 && mouseX < 300 && mouseY > 230 && mouseY < 310){
       gameState = "play";
       resetCharacter ();
       resetPlatforms();
@@ -121,7 +123,7 @@ function draw() {
   
 if (gameState === "start"){
   drawStartButton();
-  return; // stop draw so game does not start.
+  return; // stop draw loop so game does not start.
 }
 if (gameState === "gameover"){
   drawRestartButton();
@@ -132,7 +134,7 @@ if (gameState === "gameover"){
   velocityY += gravity;
   y += velocityY;
 
-  // hit the ground - game over
+  // Character falls out of screen- game over
   if (y > height) {
     gameState = "gameover";
     return;

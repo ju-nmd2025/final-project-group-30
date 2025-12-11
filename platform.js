@@ -15,15 +15,16 @@ export default class Platform {
   }
 }
 
-// Check if character is ontop on platform
+// Check if character lands on platform
 function checkPlatformCollision() {
   
   for (let p of platforms) {
-    // Only check when falling and character is over the platform
+  
     const isFalling = velocityY > 0;
     const isAbovePlatform = y + character.h <= p.y + velocityY + 1;
     const isTouchingPlatform =
       x + character.w > p.x && x < p.x + p.w && y + character.h >= p.y;
+
 
     if (isFalling && isAbovePlatform && isTouchingPlatform) {
       y = p.y - character.h; // Place character on top
