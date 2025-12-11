@@ -3,7 +3,7 @@ import Platform from "./platform.js";
 import MovingPlatform from "./movingplatforms.js";
 import BreakablePlatform from "./breakableplatform.js";
 
-
+let gameState = "start";
 
 //set start position
 let x = 100;
@@ -14,7 +14,6 @@ let y = 100;
 let velocityY = 0;
 const gravity = 0.35;
 const jumpSpeed = -15;
-let hitTheGround = false;
 
 
 //generare platforms (arrays)
@@ -45,7 +44,11 @@ let breakablePlatforms = [
   new BreakablePlatform(200, 90, 80, 20),
 ];
 
-
+function resetCharacter (){
+  x = 100;
+  y = 100;
+  velocityY = 0;
+}
 
 
 //setup canvas
@@ -54,22 +57,85 @@ function setup() {
 
 }
 
+function resetPlatforms (){
+  platforms = [];
+  for (let i = 0; i < 10; i++){
+    let px = random (20, 320);
+    let py = startY - i * spacing;
+    platforms.push (new Platform (px, py, 80, 20));
+  }
+  movingPlatforms = [
+    new MovingPlatform(40, 150, 80, 20),
+    new MovingPlatform(200, 90, 80, 20),
+    new MovingPlatform(100, 250, 80, 20),
+    new MovingPlatform(50, 350, 80, 20),
+    new MovingPlatform(260, 420, 80, 20),
+  ];
+  breakablePlatforms = [
+    new BreakablePlatform(40, 150, 80, 20),
+    new BreakablePlatform(200, 90, 80, 20),
+  ];
+}
+// design of start and restart button
+function drawStartButton (){
+  fill ("pink");
+  rect (150, 250, 100, 50);
+  fill ("black");
+  textSize (20);
+  text ("START", 170, 282);
+}
+function drawRestartButton (){
+  fill ("pink");
+  rect (150, 250, 100, 50);
+  fill ("black");
+  textSize (20);
+  text ("RESTART", 155, 282);
+}
+
+// start game when clicked the start button
+function mousePressed (){
+  if (gameState === "start"){
+    if (mouseX > 150 && mouseX < 250 && mouseY > 250 && mouseY < 300){
+      gameState = "play";
+      resetCharacter();
+      resetPlatforms();
+    }
+  }
+
+  // restart game when clicked the gameover
+  if (gameState === "gameover"){
+    if (mouseX > 150 && mouseX < 270 && mouseY > 250 && mouseY < 300){
+      gameState = "play";
+      resetCharacter ();
+      resetPlatforms();
+    }
+  }
+}
+
 function draw() {
 
   //background
   background(0, 220, 250);
-  rect(0, 540, 400, 300);
   strokeWeight(0);
-  fill(255, 250, 200);
-
+  fill (255, 250, 200);
+  
+if (gameState === "start"){
+  drawStartButton();
+  return; // stop draw so game does not start.
+}
+if (gameState === "gameover"){
+  drawRestartButton();
+  return;
+}
 
   //apply gravity to character
   velocityY += gravity;
   y += velocityY;
 
-  // hit the ground - stop
-  if (y > 500) {
-    velocityY = 0;
+  // hit the ground - game over
+  if (y > height) {
+    gameState = "gameover";
+    return;
   }
 
 
