@@ -79,23 +79,23 @@ function resetPlatforms (){
 // design of start and restart button
 function drawStartButton (){
   fill ("pink");
-  rect (150, 250, 100, 50);
+  rect (100, 230, 200, 80);
   fill ("black");
-  textSize (20);
-  text ("START", 170, 282);
+  textSize (32);
+  text ("START", 150, 282);
 }
 function drawRestartButton (){
   fill ("pink");
-  rect (150, 250, 100, 50);
+  rect (100, 230, 200, 80);
   fill ("black");
-  textSize (20);
-  text ("RESTART", 155, 282);
+  textSize (32);
+  text ("RESTART", 130, 282);
 }
 
 // start game when clicked the start button
 function mousePressed (){
   if (gameState === "start"){
-    if (mouseX > 150 && mouseX < 250 && mouseY > 250 && mouseY < 300){
+    if (mouseX > 100 && mouseX < 300 && mouseY > 230 && mouseY < 310){
       gameState = "play";
       resetCharacter();
       resetPlatforms();
@@ -104,7 +104,7 @@ function mousePressed (){
 
   // restart game when clicked the gameover
   if (gameState === "gameover"){
-    if (mouseX > 150 && mouseX < 270 && mouseY > 250 && mouseY < 300){
+    if (mouseX > 100 && mouseX < 300 && mouseY > 230 && mouseY < 30){
       gameState = "play";
       resetCharacter ();
       resetPlatforms();
