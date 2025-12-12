@@ -149,7 +149,7 @@ if (gameState === "gameover"){
   //call the functions "check collision" from files
   checkPlatformCollision();
   checkMovingPlatformCollision();
-  checkBreakablePlatformCollision();
+  checkBreakablePlatformCollision(breakablePlatforms);
 
 
   //move platforms down when jumping
@@ -179,7 +179,7 @@ if (gameState === "gameover"){
     }
 
     // when Brakable platforms goes under screen, remove and add new
-    recycleBreakablePlatforms();
+    recycleBreakablePlatforms(breakablePlatforms);
   }
 
   // draw platforms
