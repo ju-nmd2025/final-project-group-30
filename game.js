@@ -123,7 +123,7 @@ function draw() {
   
 if (gameState === "start"){
   drawStartButton();
-  return; // stop draw loop so game does not start.
+  return; 
 }
 if (gameState === "gameover"){
   drawRestartButton();
@@ -147,8 +147,8 @@ if (gameState === "gameover"){
 
 
   //call the functions "check collision" from files
-  checkPlatformCollision();
-  checkMovingPlatformCollision();
+  checkPlatformCollision(platforms);
+  checkMovingPlatformCollision(movingPlatforms);
   checkBreakablePlatformCollision(breakablePlatforms);
 
 
@@ -162,7 +162,7 @@ if (gameState === "gameover"){
       p.y += diff;
 
       //When Regularplatforms goes under screen, remove and add new 
-       recyclePlatforms();
+       recyclePlatforms(platforms);
         
     }
     // movingPlatforms goes down
@@ -171,7 +171,7 @@ if (gameState === "gameover"){
     }
 
     // when movingPlatforms goes under screen, remove and add new
-    recycleMovingPlatforms();
+    recycleMovingPlatforms(movingPlatforms);
 
     //breakable platforms goes down
     for(let bp of breakablePlatforms){

@@ -39,13 +39,13 @@ export let character = {
 
 
       // left ear
-      push(); // spara nuvarande koordinatsystem
+      push(); 
       fill("pink");
       strokeWeight(0);
-      translate(x + 5, y +10); // flytta origo till cirkelns/ellipsens mitt
-      rotate(radians(50)); // rotera 45° (ändra värdet som du vill)
+      translate(x + 5, y +10); // flytta mittpunkt till cirkelns mitt
+      rotate(radians(50)); 
       ellipse(0, 0, 15, 25);
-      pop(); // återställ koordinatsystemet
+      pop(); 
 
       //right ear
       push();
