@@ -10,7 +10,7 @@ let x = 100;
 let y = 100;
 
 
-//jump system
+//jump system 
 let velocityY = 0;
 const gravity = 0.35;
 const jumpSpeed = -15;
