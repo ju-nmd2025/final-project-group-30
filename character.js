@@ -1,9 +1,63 @@
+
+
 export let character = {
     x: 50,
-    y: 50,
+    y: 250,
     w: 50,
     h: 50,
-    draw() {
-        rect(this.x, this.y, this.w, this.h);
-    },
+
+    // do character
+    draw(x, y) {
+      this.x = x;
+      this.y = y;
+
+      //face
+      push();
+      fill("pink");
+      ellipse(this.x+ 24, this.y+27, this.w, this.h);
+      pop();
+
+      //left eye
+      ellipse(x + 14, y + 19, 8, 10); 
+      // right eye
+      ellipse(x + 33, y + 19, 8, 10);
+
+      push(0);
+      fill(0);
+      ellipse(x + 14, y + 19, 4, 4); //left pupil
+      ellipse(x + 33, y + 19, 4, 4); // right pupil
+      pop();
+
+      //nose
+      ellipse(x + 24, y + 34, 20, 15); 
+
+      push();
+      fill(0);
+      ellipse(x + 28, y + 34, 5, 5); // left nostril
+      ellipse(x + 20, y + 34, 5, 5); // right nostril
+      pop();
+
+
+      // left ear
+      push(); 
+      fill("pink");
+      strokeWeight(0);
+      translate(x + 5, y +10); // flytta mittpunkt till cirkelns mitt
+      rotate(radians(50)); 
+      ellipse(0, 0, 15, 25);
+      pop(); 
+
+      //right ear
+      push();
+      fill("pink");
+      strokeWeight(0);
+      translate(x+43, y+10);
+      rotate(radians(130));
+      ellipse(0, 0, 15, 25);
+      pop();
+    }
+
+
 };
+
+

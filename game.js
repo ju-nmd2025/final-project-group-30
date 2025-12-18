@@ -1,42 +1,209 @@
-import { character } from "./character";
-import platform from "platform";
+import { character } from "./character.js";
+import Platform from "./platform.js";
+import MovingPlatform from "./movingplatforms.js";
+import BreakablePlatform from "./breakableplatform.js";
 
-function setup() {
-    createCanvas(400, 400);
-}
+let gameState = "start";
 
-// Obstacle / Spike / Death
-function drawObstacle() {
-    push();
-    fill("red");
-    triangle(180, 300, 210, 240, 240, 300);
-    pop();
-}
-
+// set start position
 let x = 100;
 let y = 100;
 
+
+//jump system 
+let velocityY = 0;
+const gravity = 0.35;
+const jumpSpeed = -15;
+
+
+//generare regular platforms (arrays)
+let platforms = [];
+let startY = 500; // Start close to ground
+let spacing = 80; // Distance between platforms
+
+for (let i = 0; i < 10; i++) {
+  let px = random(20, 320); // random x-position
+  let py = startY - i * spacing; 
+  platforms.push(new Platform(px, py, 80, 20));
+}
+
+
+//generate some movingplatforms (arrays)
+let movingPlatforms = [
+  new MovingPlatform(40, 150, 80, 20),
+  new MovingPlatform(200, 90, 80, 20),
+  new MovingPlatform(100, 250, 80, 20),
+  new MovingPlatform(50, 350, 80, 20),
+  new MovingPlatform(260, 420, 80, 20),
+  
+];
+
+//Generate BreakingPlatforms (arrays)
+let breakablePlatforms = [
+  new BreakablePlatform(40, 150, 80, 20),
+  new BreakablePlatform(200, 90, 80, 20),
+];
+
+// To call on when game over
+function resetCharacter (){
+  x = 100;
+  y = 100;
+  velocityY = 0;
+}
+
+
+//setup canvas
+function setup() {
+  createCanvas(400, 600);
+
+}
+
+// to call on when game over
+function resetPlatforms (){
+  platforms = [];
+  for (let i = 0; i < 10; i++){
+    let px = random (20, 320);
+    let py = startY - i * spacing;
+    platforms.push (new Platform (px, py, 80, 20));
+  }
+  movingPlatforms = [
+    new MovingPlatform(40, 150, 80, 20),
+    new MovingPlatform(200, 90, 80, 20),
+    new MovingPlatform(100, 250, 80, 20),
+    new MovingPlatform(50, 350, 80, 20),
+    new MovingPlatform(260, 420, 80, 20),
+  ];
+  breakablePlatforms = [
+    new BreakablePlatform(40, 150, 80, 20),
+    new BreakablePlatform(200, 90, 80, 20),
+  ];
+}
+// design of start and restart button
+function drawStartButton (){
+  fill ("pink");
+  rect (100, 230, 200, 80);
+  fill ("black");
+  textSize (32);
+  text ("START", 150, 282);
+}
+function drawRestartButton (){
+  fill ("pink");
+  rect (100, 230, 200, 80);
+  fill ("black");
+  textSize (32);
+  text ("RESTART", 130, 282);
+}
+
+// start game when clicking the start button
+function mousePressed (){
+  if (gameState === "start"){
+    if (mouseX > 100 && mouseX < 300 && mouseY > 230 && mouseY < 310){
+      gameState = "play";
+      resetCharacter();
+      resetPlatforms();
+    }
+  }
+
+  // restart game when clicking the restart button
+  if (gameState === "gameover"){
+    if (mouseX > 100 && mouseX < 300 && mouseY > 230 && mouseY < 310){
+      gameState = "play";
+      resetCharacter ();
+      resetPlatforms();
+    }
+  }
+}
+
 function draw() {
-    background(100, 100, 100);
 
-    character.draw();
-	platform.draw();
-
-    platform.x -= 10;
-    if(platform.x + platform.w < 0){
-        platform.x = 500;
-    }
-
-    if(character.y + character.h < 300){
-        character.y += 10;
-    }
-
-    // Floor
-    line(0, 300, 400, 300);
+  //background
+  background(0, 220, 250);
+  strokeWeight(0);
+  fill (255, 250, 200);
+  
+if (gameState === "start"){
+  drawStartButton();
+  return; 
+}
+if (gameState === "gameover"){
+  drawRestartButton();
+  return;
 }
 
-function keyPressed(){
-    if(character.y + character.h === 300){
-        character.y -= 80;
+  //apply gravity to character
+  velocityY += gravity;
+  y += velocityY;
+
+  // Character falls out of screen- game over
+  if (y > height) {
+    gameState = "gameover";
+    return;
+  }
+
+
+  //move with clicks from left to right
+  if (keyIsDown(37)) x -= 5;
+  if (keyIsDown(39)) x += 5;
+
+
+  //call the functions "check collision" from files
+  checkPlatformCollision(platforms);
+  checkMovingPlatformCollision(movingPlatforms);
+  checkBreakablePlatformCollision(breakablePlatforms);
+
+
+  //move platforms down when jumping
+  if (y < height / 2) {
+    let diff = height / 2 - y;
+    y = height / 2;
+
+    //Move Regularplatforms down
+    for (let p of platforms) {
+      p.y += diff;
+
+      //When Regularplatforms goes under screen, remove and add new 
+       recyclePlatforms(platforms);
+        
     }
-}
+    // movingPlatforms goes down
+    for (let mp of movingPlatforms){
+      mp.y+= diff;
+    }
+
+    // when movingPlatforms goes under screen, remove and add new
+    recycleMovingPlatforms(movingPlatforms);
+
+    //breakable platforms goes down
+    for(let bp of breakablePlatforms){
+      bp.y+= diff;
+    }
+
+    // when Brakable platforms goes under screen, remove and add new
+    recycleBreakablePlatforms(breakablePlatforms);
+  }
+
+  // draw platforms
+  for (let p of platforms) {
+    p.draw();
+  }
+
+  //draw movingPlatforms
+  for (let mp of movingPlatforms) {
+    mp.update(); // gå åt sidan
+    mp.draw();
+  }
+
+  // draw  breakable platform
+  for (let bp of breakablePlatforms){
+    bp.draw ();
+  }
+
+  // draw chararcter
+  character.draw(x, y);
+
+
+  }
+
+ 
+
+
